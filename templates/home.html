@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- Banner -->
+
+    <div class="p-5 mb-4 bg-dark text-white rounded text-center shadow">
+        <h1>🎬 Movie Ticket Booking Portal</h1>
+        <p class="mb-0">Book your favorite movies anytime, anywhere.</p>
+    </div>
+
+    <!-- Heading -->
+
+    <h2 class="text-center mb-4 text-danger">
+        🎥 Now Showing
+    </h2>
+
+    <!-- Search & Filter -->
+
+    <form method="GET" class="row g-2 mb-4">
+
+        <div class="col-md-6">
+            <input
+                type="text"
+                name="q"
+                class="form-control"
+                placeholder="Search movies..."
+                value="{{ query }}">
+        </div>
+
+        <div class="col-md-4">
+            <select name="genre" class="form-select">
+
+                <option value="">All Genres</option>
+
+                {% for code, name in genres %}
+                <option value="{{ code }}"
+                    {% if genre == code %}selected{% endif %}>
+                    {{ name }}
+                </option>
+                {% endfor %}
+
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-warning w-100">
+                🔍 Search
+            </button>
+        </div>
+
+    </form>
+
+    <!-- Movie Cards -->
+
+    <div class="row">
+
+        {% for movie in movies %}
+
+        <div class="col-lg-4 col-md-6 mb-4">
+
+            <div class="card bg-dark text-white h-100 shadow">
+
+                <img
+                    src="{{ movie.poster_url }}"
+                    class="card-img-top"
+                    style="height:420px; object-fit:cover;">
+
+                <div class="card-body">
+
+                    <h4 class="card-title">
+                        {{ movie.title }}
+                    </h4>
+
+                    {% if movie.average_rating %}
+                    <span class="badge bg-warning text-dark mb-2">
+                        ⭐ {{ movie.average_rating|floatformat:1 }}/5
+                    </span>
+                    {% else %}
+                    <span class="badge bg-secondary mb-2">
+                        No Reviews
+                    </span>
+                    {% endif %}
+
+                    <p>
+                        <strong>Genre:</strong>
+                        {{ movie.get_genre_display }}
+                    </p>
+
+                    <p>
+                        <strong>Duration:</strong>
+                        {{ movie.duration_minutes }} Minutes
+                    </p>
+
+                    <p>
+                        <strong>Release:</strong>
+                        {{ movie.release_date }}
+                    </p>
+
+                </div>
+
+                <div class="card-footer bg-dark border-0">
+
+                    <a href="{% url 'movie_detail' movie.id %}"
+                       class="btn btn-danger w-100">
+
+                        🎟 Book Now
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="col-12">
+
+            <div class="alert alert-warning text-center">
+
+                <h4>No movies found.</h4>
+
+                <p>Try another search or genre.</p>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

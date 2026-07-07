@@ -1,0 +1,21 @@
+
+
+.card img{
+    border-bottom:3px solid crimson;
+}
+
+body{
+    min-height:100vh;
+}
+
+h1{
+    color:#ffc107;
+}
+.card {
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(255,255,255,.25);
+}

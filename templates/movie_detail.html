@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-md-4">
+        <img src="{{ movie.poster_url }}"
+             class="img-fluid rounded shadow">
+    </div>
+
+    <div class="col-md-8">
+
+        <h1>{{ movie.title }}</h1>
+
+        <h5 class="text-warning">
+            {{ movie.get_genre_display }}
+        </h5>
+
+        <p>
+            <strong>Duration:</strong>
+            {{ movie.duration_minutes }} Minutes
+        </p>
+
+        <p>
+            <strong>Release Date:</strong>
+            {{ movie.release_date }}
+        </p>
+
+        <hr>
+
+        <h4>Description</h4>
+
+        <p>
+            {{ movie.description }}
+        </p>
+
+        <hr>
+
+        <h4>Available Showtimes</h4>
+
+        {% for show in movie.showtimes.all %}
+            <a href="{% url 'book_seat' show.id %}"
+               class="btn btn-warning m-2">
+                {{ show.show_date }} {{ show.show_time }}
+            </a>
+        {% empty %}
+            <p>No showtimes available.</p>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<hr>
+
+<!-- Review Form -->
+
+<h3 class="mt-4">⭐ Write a Review</h3>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-warning">
+        Submit Review
+    </button>
+</form>
+
+<hr>
+
+<!-- Reviews -->
+
+<h3>⭐ User Reviews</h3>
+
+{% for review in reviews %}
+
+<div class="card mb-3">
+
+    <div class="card-body">
+
+        <h5>{{ review.reviewer_name }}</h5>
+
+        <p class="text-warning">
+            ⭐ {{ review.rating }}/5
+        </p>
+
+        <p>{{ review.comment }}</p>
+
+        <small class="text-muted">
+            {{ review.created_at }}
+        </small>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<div class="alert alert-secondary">
+    No reviews yet.
+</div>
+
+{% endfor %}
+
+{% endblock %}
